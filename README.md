@@ -64,7 +64,7 @@ A summary of the access policies in place can be found in the table below.
 | Web 1    | no                  | RedTeamNet, ElkNet   |
 | Web 2    | no                  | RedTeamNet, ElkNet   |
 | Web 3    | no                  | RedteamNet, ElkNet   |
-| Elk VM   | Yes                 | ElkNet, RedteamNet   |
+| Elk VM   | Yes                 | ElkNet, RedteamNet, # mypublicIP port 5601   |
 | LB       | yes                 | #mypublicIP port 80  |
 
 ### Elk Configuration
