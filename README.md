@@ -25,7 +25,7 @@ This document contains the following details:
 The main purpose of this network is to expose a load-balanced and monitored instance of DVWA, the D*mn Vulnerable Web Application, although you can also modify the playbooks to deploy an a docker image of your preference.
 
 Load balancing ensures that the application will be highly available as no one server will be overworked, in addition to restricting access to the network based on IP.
-- _Load Balancers protect the availablilty of a system, and specifically act as a guard against DDoS attacks. By having multiple instances of a web application in an availability set hooked up to a load balancer we can ensure our organization's material is still available if one or more of the servers are compromised.  The advantage of accessing this from the backend with a jumpbox is that it provides a secure backdoor to the systme that only the administrator can access, and in combination with the docker container ensures that noone can ssh into the web server from outside, and even if they can, the assets are secured within the docker container that the intruder would require knowledge of to access (although this is a last ditch defence if the attacker has already gained persistence)_
+- _Load Balancers protect the availablilty of a system, and specifically act as a guard against DDoS attacks. By having multiple instances of a web application in an availability set hooked up to a load balancer we can ensure our organization's material is still available if one or more of the servers are compromised.  The advantage of accessing this from the backend with a jumpbox (RedTeamVM) is that it provides a secure backdoor to the system that only the administrator can access, and in combination with the docker container ensures that noone can ssh into the web server from outside, and even if they can, the assets are secured within the docker container that the intruder would require knowledge of to access (although this is a last ditch defence if the attacker has already gained persistence)_
 
 - !IMPORTANT _while in this example the ssh keys are stored in the .ssh folder of the ansible container THIS IS BAD PRACTICE and is only for simplicity of the demonstration. Store your SSH keys securely in an external repository!_
 
@@ -39,7 +39,7 @@ The configuration details of each machine may be found below.
 
 | Name     | Function | IP Address | Operating System |
 |----------|----------|------------|------------------|
-| Jump Box | Gateway  | 10.0.0.4   | Ubuntu/Linux     |
+|RedTeamVM | Gateway  | 10.0.0.4   | Ubuntu/Linux     |
 | Web-1    | Server   | 10.0.0.5   | Ubuntu/Linux     |
 | Web-2    | Server   | 10.0.0.6   | Ubuntu/Linux     |
 | Web-3    | Server   | 10.0.0.7   | Ubuntu/Linux     |
@@ -49,33 +49,57 @@ The configuration details of each machine may be found below.
 
 The machines on the internal network are not exposed to the public Internet. 
 
-Only the _____ machine can accept connections from the Internet. Access to this machine is only allowed from the following IP addresses:
-- _TODO: Add whitelisted IP addresses_
+Only the Jump box machine (RedTeamVM) can accept connections from the Internet. Access to this machine is only allowed from the following IP addresses:
+- _(Home Workstation IP address)_
+- _(someone you trust's IP address)_
 
-Machines within the network can only be accessed by _____.
-- _TODO: Which machine did you allow to access your ELK VM? What was its IP address?_
+Machines within the network can only be accessed by the jumpbox, RedTeamVM. The _JumpBox_ is also able to ssh to _ElkVM_ on the adjacent _ElkNet_ network thanks to adding the _network peering_. This is treated as internal traffic allowed by our secuirty rules, so the jumpbox is still the only way to ssh to the network. 
 
 A summary of the access policies in place can be found in the table below.
 
 | Name     | Publicly Accessible | Allowed IP Addresses |
 |----------|---------------------|----------------------|
-| Jump Box | Yes                 | (#mypublicIP)        |
-|          |                     |                      |
-|          |                     |                      |
+| RedTeamVM| Yes                 | (#mypublicIP)        |
+| Web 1    | no                  | RedTeamNet, ElkNet   |
+| Web 2    | no                  | RedTeamNet, ElkNet   |
+| Web 3    | no                  | RedteamNet, ElkNet   |
+| Elk VM   | no                  | ElkNet, RedteamNet   |
 
 ### Elk Configuration
 
-Ansible was used to automate configuration of the ELK machine. No configuration was performed manually, which is advantageous because...
-- _TODO: What is the main advantage of automating configuration with Ansible?_
+Ansible was used to automate configuration of the ELK machine. No configuration was performed manually, which is advantageous because it can save a lot of time and resources to automate the configurationg and deployment of webservers. Furthermore, running ansible playbooks is non-destructive, which makes the process much easier to troubleshoot as it reduces the amount of backtracking.
 
-The playbook implements the following tasks:
-- _TODO: In 3-5 bullets, explain the steps of the ELK installation play. E.g., install Docker; download image; etc._
-- ...
-- ...
+#### The pentest.yml playbook implements the following tasks:
+- turns off apache 2 (if present)
+- installs docker, python 3, and python docker module if not already present
+- downloads and launches dvwa in a docker web container running on port 80, ensures it will relaunch on reboot
+- enables docker service on boot
+
+#### The install-elk.yml playbook implements the following tasks:
+
+- Installs docker, python 3, and pythong docker module if not already present
+- configures the system to use more memory (vm.max_map_count)
+- downloads and launches the elk container from docker, reserves ports 5601, 9200, and 5044
+- enables docker service on reboot
+
+#### The filebeat-playbook.yml implements the following tasks:
+
+- downloads and installs the debian version of filebeat
+- drops in the config file in right directory
+- enables, sets up, and starts filebeat service
+- enables filebeat service on boot
+
+#### The metricbeat-playbook.yml implements the following tasks:
+
+- downloads and installs the debian version of metricbeat
+- drops the metricbeat config file in right directory
+- enables, sets up, and starts metricbeat service
+- enables metricbeat service on boot
+
 
 The following screenshot displays the result of running `docker ps` after successfully configuring the ELK instance.
 
-![TODO: Update the path with the name of your screenshot of docker ps output](Images/docker_ps_output.png)
+![docker ps output](Images/docker_ps_output.png)
 
 ### Target Machines & Beats
 This ELK server is configured to monitor the following machines:
