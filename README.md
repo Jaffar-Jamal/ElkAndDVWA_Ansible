@@ -1,12 +1,15 @@
 ## Automated ELK Stack Deployment
 
-The files in this repository were used to configure the network depicted below.
+The files in this repository were used to configure the network depicted below using an instance of ansible deployed from a docker image.
 
 ![ELK and DVWA Deployment Diagram](Diagrams/DVWAandELK_CloudDiagram.png)
 
-These files have been tested and used to generate a live ELK deployment on Azure. They can be used to either recreate the entire deployment pictured above. Alternatively, select portions of the _____ file may be used to install only certain pieces of it, such as Filebeat.
+These files have been tested and used to generate 3 instances of the "Damned Vulnerable Web Application" and a live ELK stack deployment on an Azure cloud Resource group (although it is not limited to that environment the provided documentation will be for setup with Azure). By setting up the network architecture in the Azure portal and running the provided playbooks over SSH you will create the above network. Alternatively, you can install portions of the network on your own system using the provided playbooks individually (assuming your network has a similar topology and you are using ansible). This would allow you to install just the dvwa, or the elk stack and its beats depending on your preference.
 
-  - _TODO: Enter the playbook file._
+  - dvwa playbook: Ansible/dvwaPlaybooks_Ansible/pentest.yml
+  - elk playbook: Ansible/elkPlaybooks_Ansible/install-elk.yml
+  - filebeat: Ansible/elkPlaybooks_Ansible/filebeat-playbook.yml
+  - metricbeat: Ansible/elkPlaybooks_Ansible/metricbeat-playbook.yml
 
 This document contains the following details:
 - Description of the Topology
@@ -19,24 +22,28 @@ This document contains the following details:
 
 ### Description of the Topology
 
-The main purpose of this network is to expose a load-balanced and monitored instance of DVWA, the D*mn Vulnerable Web Application.
+The main purpose of this network is to expose a load-balanced and monitored instance of DVWA, the D*mn Vulnerable Web Application, although you can also modify the playbooks to deploy an a docker image of your preference.
 
-Load balancing ensures that the application will be highly _____, in addition to restricting _____ to the network.
-- _TODO: What aspect of security do load balancers protect? What is the advantage of a jump box?_
+Load balancing ensures that the application will be highly available as no one server will be overworked, in addition to restricting access to the network based on IP.
+- _Load Balancers protect the availablilty of a system, and specifically act as a guard against DDoS attacks. By having multiple instances of a web application in an availability set hooked up to a load balancer we can ensure our organization's material is still available if one or more of the servers are compromised.  The advantage of accessing this from the backend with a jumpbox is that it provides a secure backdoor to the systme that only the administrator can access, and in combination with the docker container ensures that noone can ssh into the web server from outside, and even if they can, the assets are secured within the docker container that the intruder would require knowledge of to access (although this is a last ditch defence if the attacker has already gained persistence)_
 
-Integrating an ELK server allows users to easily monitor the vulnerable VMs for changes to the _____ and system _____.
-- _TODO: What does Filebeat watch for?_
-- _TODO: What does Metricbeat record?_
+- !IMPORTANT _while in this example the ssh keys are stored in the .ssh folder of the ansible container THIS IS BAD PRACTICE and is only for simplicity of the demonstration. Store your SSH keys securely in an external repository!_
+
+Integrating an ELK server allows users to easily monitor the vulnerable VMs for changes to the containers and system files, services, & logs.
+- _filebeat is a module in elk for forwarding and centralizing log data. It runs as an agent on your servers, monitoring the log files or locations you specify, collects, and forwards them to Elasticsearch or Logstach for indexing_
+- _Metricbeat, as the name implies, is used to periodically collect metrics from the operating system and services running on the container/server, and ship them to ELK_
+
+
 
 The configuration details of each machine may be found below.
-_Note: Use the [Markdown Table Generator](http://www.tablesgenerator.com/markdown_tables) to add/remove values from the table_.
 
 | Name     | Function | IP Address | Operating System |
 |----------|----------|------------|------------------|
-| Jump Box | Gateway  | 10.0.0.1   | Linux            |
-| TODO     |          |            |                  |
-| TODO     |          |            |                  |
-| TODO     |          |            |                  |
+| Jump Box | Gateway  | 10.0.0.4   | Ubuntu/Linux     |
+| Web-1    | Server   | 10.0.0.5   | Ubuntu/Linux     |
+| Web-2    | Server   | 10.0.0.6   | Ubuntu/Linux     |
+| Web-3    | Server   | 10.0.0.7   | Ubuntu/Linux     |
+| Elk-VM   | Monitor  | 10.2.0.5   | Ubuntu/Linux     |
 
 ### Access Policies
 
@@ -52,7 +59,7 @@ A summary of the access policies in place can be found in the table below.
 
 | Name     | Publicly Accessible | Allowed IP Addresses |
 |----------|---------------------|----------------------|
-| Jump Box | Yes/No              | 10.0.0.1 10.0.0.2    |
+| Jump Box | Yes                 | (#mypublicIP)        |
 |          |                     |                      |
 |          |                     |                      |
 
