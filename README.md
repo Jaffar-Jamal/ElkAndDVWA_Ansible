@@ -134,10 +134,11 @@ SSH into the control node and follow the steps below:
 - ```
   remote_user = sysadmin
   ```
-- ```
+- _tests if ansible is communicating with webservers_
+   ```
    ansible all -m ping
    ``` 
-  _tests if ansible is communicating with webservers_
+  
 - if neccesary, add the links to the ssh keys in your host file
 - Update the filebeat-config file to include...
 - ```
