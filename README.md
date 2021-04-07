@@ -120,13 +120,45 @@ In order to use the playbook, you will need to have an Ansible control node alre
 SSH into the control node and follow the steps below:
 - Copy the playbooks, and config files to /etc/ansible.
 - Update the hosts file to include webservers group
+- 	```
+		# /etc/ansible/hosts
+		[webservers]
+		10.0.0.4 ansible_python_interpreter=/usr/bin/python3
+		10.0.0.5 ansible_python_interpreter=/usr/bin/python3
+		10.0.0.6 ansible_python_interpreter=/usr/bin/python3
+
+		[elk]
+		10.2.0.5 ansible_python_interpreter=/usr/bin/python3
+		```
+- if neccesary, update the remote_login line in ansible.cfg
+- ```
+  remote_user = sysadmin
+  ```
+- ```
+   ansible all -m ping
+   ``` 
+  _tests if ansible is communicating with webservers_
+- if neccesary, add the links to the ssh keys in your host file
+- Update the filebeat-config file to include...
+- ```
+  setup.kibana:
+    host: "<ELK VM PRIVATE IP>:5601"
+    ```
+- ```
+  output.elasticsearch:
+  # Array of hosts to connect to.
+  hosts: ["<ELK VM PRIVATE IP>:9200"]
+  username: "elastic"
+  password: "changeme"
+
+  # Optional protocol and basic auth credentials.
+  #protocol: "https"
+  #username: "elastic"
+  #password: "changeme"
+  ```
 - 
-- ansible all -m ping _tests if ansible is communicating with webservers_
-- Update the config files to include...
--  
 - 
-- 
-- Run the playbook, and navigate to http://<ElkVM Public IP>:5601/app/kibana#/home to check that the installation worked as expected.
+- Run the desired playbook(s), and navigate to http://<ElkVM Public IP>:5601/app/kibana#/home to check that the installation worked as expected.
 
 _TODO: Answer the following questions to fill in the blanks:_
 - _Which file is the playbook? Where do you copy it?_
