@@ -191,7 +191,7 @@ Once you are SSH into ansible's docker container you can follow the steps below:
 
 - you should land on this page, otherwise you will have to back and troubleshoot
   ![kibana landing page](Diagrams/kibanaScreenshot.png)
-
+- click on explore your own and you will be redirected to the main Kibana page, where you can then access the logs from the beats
 If you want to download these files, feel free to clone the repository with 
 ```
 git clone https://github.com/patmakes/ElkAndDVWA_Ansible
