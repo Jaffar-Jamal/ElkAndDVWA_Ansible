@@ -2,7 +2,7 @@
 
 The files in this repository were used to configure the network depicted below using an instance of ansible deployed from a docker image.
 
-![ELK and DVWA Deployment Diagram](Diagrams/DVWAandELK_CloudDeployment2.png)
+![ELK and DVWA Deployment Diagram](Diagrams/DVWA_andELK_CloudDeployment2.png)
 
 These files have been tested and used to generate 3 instances of the "Damned Vulnerable Web Application" and a live ELK stack deployment on an Azure cloud Resource group (although it is not limited to that environment the provided documentation will be for setup with Azure). By setting up the network architecture in the Azure portal and running the provided playbooks over SSH you will create the above network. Alternatively, you can install portions of the network on your own system using the provided playbooks individually (assuming your network has a similar topology and you are using ansible). This would allow you to install just the dvwa, or the elk stack and its beats depending on your preference.
 
