@@ -1,0 +1,9 @@
+---
+- name: install apache and docker
+  hosts: webservers
+  become: true
+  tasks:
+  - name: Install apache httpd (state=present is optional)
+    apt:
+        name: apache2, docker.io
+        state: present

@@ -1,0 +1,13 @@
+
+Starting Nmap 7.60 ( https://nmap.org ) at 2021-03-01 17:32 EST
+Nmap scan report for 192.168.2.23
+Host is up (0.0029s latency).
+Not shown: 968 filtered ports, 27 closed ports
+PORT      STATE SERVICE
+8008/tcp  open  http
+8009/tcp  open  ajp13
+8443/tcp  open  https-alt
+9000/tcp  open  cslistener
+10001/tcp open  scp-config
+
+Nmap done: 1 IP address (1 host up) scanned in 30.35 seconds
