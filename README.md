@@ -39,11 +39,11 @@ The configuration details of each machine may be found below. Note that while th
 
 | Name     | Function | IP Address | Operating System |
 |----------|----------|------------|------------------|
-|RedTeamVM | Gateway  | 13.82.110.95/10.0.0.4| Ubuntu/Linux     |
+|RedTeamVM | Gateway  | 13.82.110.x/10.0.0.4| Ubuntu/Linux     |
 | Web-1    | Server   | 10.0.0.5   | Ubuntu/Linux     |
 | Web-2    | Server   | 10.0.0.6   | Ubuntu/Linux     |
 | Web-3    | Server   | 10.0.0.7   | Ubuntu/Linux     |
-| Elk-VM   | Monitor  | 10.2.0.5   | Ubuntu/Linux     |
+| Elk-VM   | Monitor  | 52.137.78.x/10.2.0.5   | Ubuntu/Linux     |
 |LB        | Balancer |40.114.25.215| N/A              |
 
 ### Access Policies
@@ -60,7 +60,7 @@ A summary of the access policies in place can be found in the table below.
 
 | Name     | Publicly Accessible | Allowed IP Addresses |
 |----------|---------------------|----------------------|
-| RedTeamVM| Yes                 | (#mypublicIP)port 22 |
+| RedTeamVM| Yes                 | #mypublicIP port 22 |
 | Web 1    | no                  | RedTeamNet, ElkNet   |
 | Web 2    | no                  | RedTeamNet, ElkNet   |
 | Web 3    | no                  | RedteamNet, ElkNet   |
@@ -187,7 +187,7 @@ Once you are SSH into ansible's docker container you can follow the steps below:
   #username: "elastic"
   #password: "changeme"
   ```
-- Run the desired playbook(s), and navigate to http://<ElkVM Public IP>:5601/app/kibana#/home to check that the installation worked as expected. Wait till you have verified Kibana is running before you update the login credentials, then update the config file.
+- Run the desired playbook(s), and navigate to http://{ElkVM Public IP}:5601/app/kibana#/home to check that the installation worked as expected. Wait till you have verified Kibana is running before you update the login credentials, then update the config file.
 
 If you want to download the files, feel free to clone the repository with 
 ```
