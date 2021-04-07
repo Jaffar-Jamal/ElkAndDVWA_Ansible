@@ -35,15 +35,16 @@ Integrating an ELK server allows users to easily monitor the vulnerable VMs for 
 
 
 
-The configuration details of each machine may be found below.
+The configuration details of each machine may be found below. Note that while the Loab Balancer is not a VM, it is important to include its details here for the purpose of the exercise.
 
 | Name     | Function | IP Address | Operating System |
 |----------|----------|------------|------------------|
-|RedTeamVM | Gateway  | 10.0.0.4   | Ubuntu/Linux     |
+|RedTeamVM | Gateway  | 13.82.110.95/10.0.0.4| Ubuntu/Linux     |
 | Web-1    | Server   | 10.0.0.5   | Ubuntu/Linux     |
 | Web-2    | Server   | 10.0.0.6   | Ubuntu/Linux     |
 | Web-3    | Server   | 10.0.0.7   | Ubuntu/Linux     |
 | Elk-VM   | Monitor  | 10.2.0.5   | Ubuntu/Linux     |
+|LB        | Balancer |40.114.25.215| N/A              |
 
 ### Access Policies
 
@@ -59,11 +60,12 @@ A summary of the access policies in place can be found in the table below.
 
 | Name     | Publicly Accessible | Allowed IP Addresses |
 |----------|---------------------|----------------------|
-| RedTeamVM| Yes                 | (#mypublicIP)        |
+| RedTeamVM| Yes                 | (#mypublicIP)port 22 |
 | Web 1    | no                  | RedTeamNet, ElkNet   |
 | Web 2    | no                  | RedTeamNet, ElkNet   |
 | Web 3    | no                  | RedteamNet, ElkNet   |
-| Elk VM   | no                  | ElkNet, RedteamNet   |
+| Elk VM   | Yes                 | ElkNet, RedteamNet   |
+| LB       | yes                 | #mypublicIP port 80  |
 
 ### Elk Configuration
 
