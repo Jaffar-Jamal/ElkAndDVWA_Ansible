@@ -190,7 +190,7 @@ Once you are SSH into ansible's docker container you can follow the steps below:
 - Run the desired playbook(s), and navigate to http://{ElkVM Public IP}:5601/app/kibana#/home to check that the installation worked as expected. Wait till you have verified Kibana is running before you update the login credentials, then update the config file.
 
 - you should land on this page, otherwise you will have to back and double check you config files and architecture
-  [](Diagrams/kibanaScreenshot.png)
+  ![kibana landing page](Diagrams/kibanaScreenshot.png)
 
 If you want to download the files, feel free to clone the repository with 
 ```
