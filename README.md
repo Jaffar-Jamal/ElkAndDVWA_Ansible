@@ -117,9 +117,20 @@ These Beats allow us to collect the following information from each machine:
 ### Using the Playbook
 In order to use the playbook, you will need to have an Ansible control node already configured. Assuming you have such a control node provisioned: 
 
-SSH into the control node and follow the steps below:
+- ssh to the jumpbox from your public IP
+- start docker
+  ```
+  sudo docker start <docker_name>
+  ```
+- attach docker
+  ```
+  sudo docker attach <docker_name>
+  ```
+
+Once you are SSH into ansible's docker container you can follow the steps below:
+- !Important: for elk to run, your VM will have to have at least 4GB memory, and 3.5 GB available
 - Copy the playbooks, and config files to /etc/ansible.
-- Update the hosts file to include webservers group
+- Update the hosts file in /etc/ansible to include webservers group
 - 	```
 		# /etc/ansible/hosts
 		[webservers]
@@ -157,13 +168,32 @@ SSH into the control node and follow the steps below:
   #username: "elastic"
   #password: "changeme"
   ```
-- 
-- 
-- Run the desired playbook(s), and navigate to http://<ElkVM Public IP>:5601/app/kibana#/home to check that the installation worked as expected.
+- update the metricbeat-config file to include...
+- Under Kibana
+  ```
+  setup.kibana:
+  host: "10.2.0.5:5601"
+  ```
+- Under Elasticsearch Output
+  ```
+  output.elasticsearch:
+  # Array of hosts to connect to.
+  hosts: ["10.2.0.5:9200"]
+  username: "elastic"
+  password: "changeme"
 
-_TODO: Answer the following questions to fill in the blanks:_
-- _Which file is the playbook? Where do you copy it?_
-- _Which file do you update to make Ansible run the playbook on a specific machine? How do I specify which machine to install the ELK server on versus which to install Filebeat on?_
-- _Which URL do you navigate to in order to check that the ELK server is running?
+  # Optional protocol and basic auth credentials.
+  #protocol: "https"
+  #username: "elastic"
+  #password: "changeme"
+  ```
+- Run the desired playbook(s), and navigate to http://<ElkVM Public IP>:5601/app/kibana#/home to check that the installation worked as expected. Wait till you have verified Kibana is running before you update the login credentials, then update the config file.
 
-_As a **Bonus**, provide the specific commands the user will need to run to download the playbook, update the files, etc._
+If you want to download the files, feel free to clone the repository with 
+```
+git clone https://github.com/patmakes/ElkAndDVWA_Ansible
+```
+and fork me to start a new branch with your own ansible playbooks and dockerimage installs!
+
+```
+git branch -m <your new branch>
