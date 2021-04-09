@@ -198,6 +198,3 @@ git clone https://github.com/patmakes/ElkAndDVWA_Ansible
 ```
 and fork me to start a new branch with your own ansible playbooks and dockerimage installs!
 
-```
-git branch -m <your new branch>
-```
